@@ -11,7 +11,9 @@
 :root, body, #reactRoot, .App__container {
     width: 100%;
     height: 100%;
+}
 
+:root {
     font-size: 62.5%;
 }
 

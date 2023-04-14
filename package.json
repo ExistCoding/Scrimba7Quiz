@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ExistCoding/Scrimba7Quiz#readme",
   "devDependencies": {
+    "nanoid": "^4.0.2",
     "parcel": "^2.8.3",
     "process": "^0.11.10",
     "react": "^18.2.0",
