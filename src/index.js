@@ -16,8 +16,15 @@ function App() {
     useEffect(() => {
         fetch("https://opentdb.com/api.php?amount=5")
             .then(res => res.json(res))
-            .then(res => res.results.map((question) => shuffleAnswers(question)))
-            .then(res => res.map((question, index) => ({...question, index, questionString: decodeHtml(question.question)})))
+            .then(res => res.results.map((question, index) => (
+                {
+                    ...question, 
+                    index, 
+                    questionString: decodeHtml(question.question), 
+                    incorrect_answers: question.incorrect_answers.map((answer) => decodeHtml(answer)),
+                    correct_answer: decodeHtml(question.correct_answer)
+                })))
+            .then(res => res.map((question) => shuffleAnswers(question)))
             .then(res => setQuestions(res));
     }, [])
 
@@ -49,8 +56,16 @@ function App() {
     function handleAnswerButton(questionIndex, answerIndex) {
         setQuestions(prevQuestions => {
             let newQuestions = [...prevQuestions];
-            newQuestions[questionIndex].shuffledAnswers[answerIndex].isSelected = 
-                !prevQuestions[questionIndex].shuffledAnswers[answerIndex].isSelected;
+            for (let i = 0; i < questions[questionIndex].shuffledAnswers.length; i++) {
+                if (i === answerIndex) {
+                    newQuestions[questionIndex].shuffledAnswers[answerIndex].isSelected = 
+                        !prevQuestions[questionIndex].shuffledAnswers[answerIndex].isSelected;
+                }
+                else {
+                    newQuestions[questionIndex].shuffledAnswers[i].isSelected = false;
+                }
+            }
+            
             return newQuestions;
         })
     }

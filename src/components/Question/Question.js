@@ -2,7 +2,11 @@ import {nanoid} from "nanoid";
 
 export default function Question({questionObject, handleAnswerButton}) {
     const answerElements = questionObject.shuffledAnswers.map((answerObject) => 
-        <button key={nanoid()} className="Question__answer" onClick={() => handleAnswerButton(questionObject.index, answerObject.index)}>{answerObject.answer}</button>
+        <button 
+            key={nanoid()} 
+            className={answerObject.isSelected?
+                "Question__answer Question__answer--selected":
+                "Question__answer Question__answer--unselected"} onClick={() => handleAnswerButton(questionObject.index, answerObject.index)}>{answerObject.answer}</button>
     )
 
     return (

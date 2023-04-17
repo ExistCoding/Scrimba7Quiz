@@ -1,5 +1,6 @@
 @import "./components/IntroSite/IntroSite.css";
 @import "./components/QuizSite/QuizSite.css";
+@import "./components/Question/Question.css";
 
 * {
     box-sizing: border-box;
@@ -10,16 +11,21 @@
 
 :root, body, #reactRoot, .App__container {
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
 }
 
 :root {
     font-size: 62.5%;
 }
 
+.App__container {
+    position: relative;
+}
+
 .App__blob {
-    width: max(30vw, 40vh);
+    width: max(20vw, 30vh);
     position: absolute;
+    z-index: -1;
 }
 
 .App__blob--lemony {
