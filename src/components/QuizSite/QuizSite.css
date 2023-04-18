@@ -36,11 +36,41 @@
 }
 
 /* 
-    width, height and margin need to match QuizSite__answerButton to prevent layout change
+    height and margin need to match QuizSite__answerButton to prevent layout change
     when showing solutions
 */
 .QuizSite__solutionContainer {
-    width: 12em;
     height: 3.5em;
     margin: 2em auto 2.5em;
+
+    font-family: 'Inter', sans-serif;
+}
+
+.QuizSite__rightSolutions {
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 1.5rem;
+
+    color: #293264;
+}
+
+.QuizSite__playAgainButton {
+    display: inline;
+    width: 10em;
+    height: 3em;
+    margin-left: 2em;
+
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 120%;
+
+    color: #F5F7FB;
+    background: #4D5B9E;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.QuizSite__playAgainButton:active {
+    box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
 }

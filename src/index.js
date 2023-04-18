@@ -7,62 +7,67 @@ import blobBaby from "./ressources/blobBaby.png";
 import IntroSite from "./components/IntroSite/IntroSite.js";
 import QuizSite from "./components/QuizSite/QuizSite.js";
 
-//refactor api response into simpler state that takes only necessary parameters
-
 function App() {
     const [questions, setQuestions] = useState(null);
     const [currSite, setCurrSite] = useState("Intro");
+    const [reset, setReset] = useState(0);
 
     useEffect(() => {
         fetch("https://opentdb.com/api.php?amount=5")
             .then(res => res.json(res))
-            .then(res => res.results.map((question, index) => (
-                {
-                    ...question, 
-                    index, 
-                    questionString: decodeHtml(question.question), 
-                    incorrect_answers: question.incorrect_answers.map((answer) => decodeHtml(answer)),
-                    correct_answer: decodeHtml(question.correct_answer)
-                })))
-            .then(res => res.map((question) => shuffleAnswers(question)))
+            .then(res => restructureData(res.results))
             .then(res => setQuestions(res));
-    }, [])
+    }, [reset])
+
+    function restructureData(rawData) {
+
+        function restructureQuestion(rawQuestion) {
+            const indexCorrectAnswer = Math.floor(Math.random() * (rawQuestion.incorrect_answers.length + 1));
+            let answerArray = rawQuestion.incorrect_answers.map(answer => 
+                ({
+                    text: decodeHtml(answer),
+                    isSelected: false,
+                    isTrue: false
+                })
+            );
+            answerArray.splice(indexCorrectAnswer, 0, 
+                {
+                    text: decodeHtml(rawQuestion.correct_answer),
+                    isSelected: false,
+                    isTrue: true
+                }
+            );
+            return {
+                category: rawQuestion.category,
+                difficulty: rawQuestion.difficulty,
+                text: decodeHtml(rawQuestion.question),
+                answers: answerArray
+            };
+        }
+
+        function decodeHtml(html) {
+            var txt = document.createElement("textarea");
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        return rawData.map(rawQuestion => restructureQuestion(rawQuestion));
+    }
 
     function handleStartButton() {
         setCurrSite("Quiz")
     }
 
-    //Returns array of objects in random sequence, containing answer text and isSelected status initialized
-    //  as false
-    function shuffleAnswers(question) {
-        const allAnswers = [...question.incorrect_answers, question.correct_answer]
-        let shuffledAnswers = [...allAnswers];
-        for (let i = shuffledAnswers.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            const temp = shuffledAnswers[i];
-            shuffledAnswers[i] = shuffledAnswers[j]
-            shuffledAnswers[j] = temp;
-        }
-        shuffledAnswers = shuffledAnswers.map((answer, index) => ({answer, index, isSelected: false}))
-        return {...question, shuffledAnswers: shuffledAnswers};
-    }
-
-    function decodeHtml(html) {
-        var txt = document.createElement("textarea");
-        txt.innerHTML = html;
-        return txt.value;
-    }
-
     function handleAnswerButton(questionIndex, answerIndex) {
         setQuestions(prevQuestions => {
             let newQuestions = [...prevQuestions];
-            for (let i = 0; i < questions[questionIndex].shuffledAnswers.length; i++) {
+            for (let i = 0; i < prevQuestions[questionIndex].answers.length; i++) {
                 if (i === answerIndex) {
-                    newQuestions[questionIndex].shuffledAnswers[answerIndex].isSelected = 
-                        !prevQuestions[questionIndex].shuffledAnswers[answerIndex].isSelected;
+                    newQuestions[questionIndex].answers[answerIndex].isSelected = 
+                        !prevQuestions[questionIndex].answers[answerIndex].isSelected;
                 }
                 else {
-                    newQuestions[questionIndex].shuffledAnswers[i].isSelected = false;
+                    newQuestions[questionIndex].answers[i].isSelected = false;
                 }
             }
             
@@ -70,13 +75,12 @@ function App() {
         })
     }
 
-    console.log(questions);
     return (
         <div className="App__container">
             <img className="App__blob App__blob--lemony" src={blobLemony}/>
             <img className="App__blob App__blob--baby" src={blobBaby}/>
             {currSite === "Intro" && <IntroSite questions={questions} handleStartButton={handleStartButton}/>}
-            {currSite === "Quiz" && <QuizSite questions={questions} handleAnswerButton={handleAnswerButton}/>}
+            {currSite === "Quiz" && <QuizSite questions={questions} handleAnswerButton={handleAnswerButton} setReset={setReset}/>}
         </div>
     )
 }
