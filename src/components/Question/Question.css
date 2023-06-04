@@ -9,7 +9,7 @@
 }
 
 .Question__text {
-    font-family: 'Karla', sans-serif;
+    font-family: "Karla", sans-serif;
     font-weight: 700;
     font-size: 1.6rem;
     line-height: 1.9rem;
@@ -19,18 +19,18 @@
 
 .Question__answerContainer {
     padding-bottom: 1.5em;
-    border-bottom: 1px solid #DBDEF0;
+    border-bottom: 1px solid #dbdef0;
 }
 
 .Question__answer {
     margin: 1.2em 1.2em 0 0;
     padding: 0.5em 1.5em;
 
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     font-weight: 500;
     font-size: 1rem;
     line-height: 120%;
-    
+
     color: #293264;
     cursor: pointer;
     border: 1px solid transparent;
@@ -43,14 +43,14 @@
 }
 
 .Question__answer--selected {
-    background-color: #D6DBF5;
+    background-color: #d6dbf5;
 }
 
 .Question__answer--true {
-    background-color: #94D7A2;
+    background-color: #94d7a2;
 }
 
 .Question__answer--selectedFalse {
     opacity: 0.5;
-    background-color: #F8BCBC;
+    background-color: #f8bcbc;
 }

@@ -9,7 +9,10 @@
     font-weight: normal;
 }
 
-:root, body, #reactRoot, .App__container {
+:root,
+body,
+#reactRoot,
+.App__container {
     width: 100%;
     min-height: 100vh;
 }
